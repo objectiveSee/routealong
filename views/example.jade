@@ -27,7 +27,11 @@ html(lang="en")
       form :first-child {
         margin-right: 20px;
       }
-
+      .pac-container {
+        width: 280px !important;
+        left: 50% !important;
+        margin-left: -140px !important;
+      }
   body
     center
       .map
@@ -39,7 +43,8 @@ html(lang="en")
         input(type="submit", value="Get routealong!")
 
     script(src="https://code.jquery.com/jquery-2.1.1.min.js")
-    script(src="http://maps.googleapis.com/maps/api/js?sensor=false")
+
+    script(src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false")
     script.
       $(document).ready(function() {
         var mapOptions = {
@@ -47,9 +52,10 @@ html(lang="en")
           zoom: 2,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map($('.map')[0],
-            mapOptions);
+        var map = new google.maps.Map($('.map')[0], mapOptions);
 
         $('input[name=from]').focus();
+        var from = new google.maps.places.Autocomplete($('input[name=from]')[0]);
+        var to = new google.maps.places.Autocomplete($('input[name=to]')[0]);
       });
 
