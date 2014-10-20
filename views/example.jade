@@ -92,11 +92,11 @@ html(lang="en")
               $.ajax({
                 type: 'POST',
                 url: '/routealong',
-                dataType: 'json',
+                contentType : 'application/json',
                 async: 'false',
                 data: JSON.stringify(points),
-                success: function() {
-                  console.log("data got sent!");
+                success: function(data) {
+                  alert(data);
                 },
                 error: function() {
                   alert('some sad error happend... dont panic!');
