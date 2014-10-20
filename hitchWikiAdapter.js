@@ -15,6 +15,12 @@ function MyAdapter() {
 
 util.inherits(MyAdapter, Adapter);
 
+function convertResults(results) {
+
+	// results are ok as is!
+	return results;
+}
+
 MyAdapter.prototype.searchBox = function(box, fn){
 	console.log('My Search!');
 	// fn(undefined);
@@ -29,8 +35,10 @@ MyAdapter.prototype.searchBox = function(box, fn){
 	console.log('url is '+ur);
 
 	request(ur, function (error, response, body) {
+		var rvalue;
   		if (!error && response.statusCode == 200) {
-    		console.log(body) // Print the google web page.
+    		// console.log(body) // Print the google web page.
+    		rvalue = convertResults(body);
 		} else {
 			if ( error ) {
 				console.log('error='+error);
@@ -38,7 +46,7 @@ MyAdapter.prototype.searchBox = function(box, fn){
 				console.log('status code = '+response.statusCode);
 			}
 		}
-		fn(undefined);
+		fn(rvalue);
 	});
 
 };
