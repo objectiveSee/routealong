@@ -86,11 +86,22 @@ html(lang="en")
               
               var path = res.routes[0].overview_path;
               var points = $.map(path, function(p){
-                return {latitude:p.lat(), longitude:p.lng()};
+                return {lat:p.lat(), lng:p.lng()};
               });
 
-              console.log('got path:');
-              console.log(points);
+              $.ajax({
+                type: 'POST',
+                url: '/routealong',
+                dataType: 'json',
+                async: 'false',
+                data: JSON.stringify(points),
+                success: function() {
+                  console.log("data got sent!");
+                },
+                error: function() {
+                  alert('some sad error happend... dont panic!');
+                }
+              });
             }
           });
 
