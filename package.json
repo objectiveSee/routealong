@@ -18,7 +18,9 @@
     "geolib": "^2.0.14",
     "geopoint": "^1.0.1",
     "jade": "^1.7.0",
-    "request": "2.45.0",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "request":"2.45.0",
+    "limiter" : "1.0.5",
+    "q":"2.0.0"
   }
 }
