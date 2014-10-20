@@ -43,7 +43,8 @@ var longitudeModifyByStroke = function(longitude, stroke) {	// TODO: naive. does
 
 // Return a box in the format you want it to be in. TODO: Allow users to override this with new export format
 var exportBox = function(box) {
-	return box[0]+','+box[1]+'|'+box[2]+','+box[3];
+	// return box[0]+','+box[1]+'|'+box[2]+','+box[3];
+	return box;
 };
 
 
@@ -61,10 +62,12 @@ var boxSize = function(box) {	// NOTE: naive. doesnt consider radius of earth
 // If box is undefined, will return a new box that is `stroke` distance from the given point (ie. each side of the box is 2*stroke in length).
 var boxExpand = function (box, point, stroke) {
 
-	var lat_minus = latitudeModifyByStroke(point.latitude, -stroke);
-	var lat_plus = latitudeModifyByStroke(point.latitude, stroke);
-	var lon_minus = latitudeModifyByStroke(point.longitude, -stroke);
-	var lon_plus = latitudeModifyByStroke(point.longitude, stroke);
+	// console.log('expand: '+box, point, stroke);
+
+	var lat_minus = latitudeModifyByStroke(point.lat, -stroke);
+	var lat_plus = latitudeModifyByStroke(point.lat, stroke);
+	var lon_minus = latitudeModifyByStroke(point.lon, -stroke);
+	var lon_plus = latitudeModifyByStroke(point.lon, stroke);
 
 	if ( !box ) {
 		return [lat_minus, lon_minus, lat_plus, lon_plus];
@@ -82,7 +85,7 @@ var convertRouteToBoxes = function (route, stroke) {
 
 	// console.log('converting boxes...');
 	var length = route.length;
-	// console.log('route has '+length+' items. Length is '+geolib.getPathLength(route)/1000.0+' km');
+	console.log('route has '+length+' items. Length is '+geolib.getPathLength(route)/1000.0+' km');
 
 	// _.each(route, function(item) {
 		// console.log('route $ '+item.latitude+','+item.longitude);
@@ -101,7 +104,10 @@ var convertRouteToBoxes = function (route, stroke) {
 
 		// if the `newBox` is too big then save `current_box` and start a new box using the last point used.
 		if ( box_size > MAX_BOX_SIZE ) {
-			boxes.push(exportBox(current_box));
+			var bbb = exportBox(current_box);
+			boxes.push(bbb);
+			console.log('PUSHED '+bbb.length);
+			console.log('SEEING '+boxes[j++].length);
 			current_box = boxExpand(undefined, route[i], stroke);	// make a new box starting w/ this point
 
 		} else {		// else, keep making the `current_box` bigger until we eventually are too big or the for-loop ends
@@ -113,6 +119,10 @@ var convertRouteToBoxes = function (route, stroke) {
 	if ( current_box ) {
 		boxes.push(exportBox(current_box));
 	}
+
+	_.each(boxes, function (b) {
+		console.log('LEN='+b.length);
+	})
 
 	return boxes;
 };
