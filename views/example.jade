@@ -39,8 +39,17 @@ html(lang="en")
         input(type="submit", value="Get routealong!")
 
     script(src="https://code.jquery.com/jquery-2.1.1.min.js")
+    script(src="http://maps.googleapis.com/maps/api/js?sensor=false")
     script.
       $(document).ready(function() {
+        var mapOptions = {
+          center: new google.maps.LatLng(10, 0),
+          zoom: 2,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map($('.map')[0],
+            mapOptions);
+
         $('input[name=from]').focus();
       });
 
