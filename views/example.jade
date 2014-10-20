@@ -18,6 +18,7 @@ html(lang="en")
       input[type=text] {
         border: 1px solid #ccc;
         border-radius: 5px;
+        width: 200px;
         padding:5px;
       }
       input[type=submit] {
@@ -28,9 +29,9 @@ html(lang="en")
         margin-right: 20px;
       }
       .pac-container {
-        width: 280px !important;
+        width: 420px !important;
         left: 50% !important;
-        margin-left: -140px !important;
+        margin-left: -210px !important;
       }
   body
     center
@@ -47,6 +48,7 @@ html(lang="en")
     script(src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false")
     script.
       $(document).ready(function() {
+
         var mapOptions = {
           center: new google.maps.LatLng(10, 0),
           zoom: 2,
@@ -54,8 +56,44 @@ html(lang="en")
         };
         var map = new google.maps.Map($('.map')[0], mapOptions);
 
+        var directionsDisplay = new google.maps.DirectionsRenderer();
+        directionsDisplay.setMap(map);
+
+        var directionsService = new google.maps.DirectionsService();
+
         $('input[name=from]').focus();
         var from = new google.maps.places.Autocomplete($('input[name=from]')[0]);
         var to = new google.maps.places.Autocomplete($('input[name=to]')[0]);
+
+        $('form').submit(function(event) {
+          event.preventDefault();
+          
+          var f = from.getPlace();
+          var t = to.getPlace();
+
+          if (!f || !t) 
+            return;
+
+          request = {
+            origin: f.geometry.location,
+            destination: t.geometry.location,
+            travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function(res, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+              directionsDisplay.setDirections(res);
+
+              
+              var path = res.routes[0].overview_path;
+              var points = $.map(path, function(p){
+                return {latitude:p.lat(), longitude:p.lng()};
+              });
+
+              console.log('got path:');
+              console.log(points);
+            }
+          });
+
+        });
       });
 
