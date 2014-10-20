@@ -1,6 +1,7 @@
 var Adapter = require('./searchAdapter.js');
 var util = require("util");
 var request = require('request');
+var _ = require('underscore');
 
 /**
  * Module exports.
@@ -17,7 +18,13 @@ util.inherits(MyAdapter, Adapter);
 
 function convertResults(results) {
 
-	// results are ok as is!
+	// Hi mike! this has been a fun day! (happy)
+	return _.filter(results, function(res) {
+
+		console.log('res='+JSON.stringify(res));
+		return true;
+
+	});
 	return results;
 }
 
@@ -38,7 +45,7 @@ MyAdapter.prototype.searchBox = function(box, fn){
 		var rvalue;
   		if (!error && response.statusCode == 200) {
     		// console.log(body) // Print the google web page.
-    		rvalue = convertResults(body);
+    		rvalue = convertResults(JSON.parse(body));		// MIKE HERE
 		} else {
 			if ( error ) {
 				console.log('error='+error);

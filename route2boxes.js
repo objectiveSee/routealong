@@ -66,8 +66,8 @@ var boxExpand = function (box, point, stroke) {
 
 	var lat_minus = latitudeModifyByStroke(point.lat, -stroke);
 	var lat_plus = latitudeModifyByStroke(point.lat, stroke);
-	var lon_minus = latitudeModifyByStroke(point.lon, -stroke);
-	var lon_plus = latitudeModifyByStroke(point.lon, stroke);
+	var lon_minus = latitudeModifyByStroke(point.lng, -stroke);
+	var lon_plus = latitudeModifyByStroke(point.lng, stroke);
 
 	if ( !box ) {
 		return [lat_minus, lon_minus, lat_plus, lon_plus];
@@ -106,8 +106,8 @@ var convertRouteToBoxes = function (route, stroke) {
 		if ( box_size > MAX_BOX_SIZE ) {
 			var bbb = exportBox(current_box);
 			boxes.push(bbb);
-			console.log('PUSHED '+bbb.length);
-			console.log('SEEING '+boxes[j++].length);
+			// console.log('PUSHED '+bbb.length);
+			// console.log('SEEING '+boxes[j++].length);
 			current_box = boxExpand(undefined, route[i], stroke);	// make a new box starting w/ this point
 
 		} else {		// else, keep making the `current_box` bigger until we eventually are too big or the for-loop ends
@@ -119,10 +119,6 @@ var convertRouteToBoxes = function (route, stroke) {
 	if ( current_box ) {
 		boxes.push(exportBox(current_box));
 	}
-
-	_.each(boxes, function (b) {
-		console.log('LEN='+b.length);
-	})
 
 	return boxes;
 };

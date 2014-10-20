@@ -21,7 +21,7 @@ var makeRequestPromises = function (adapter, boxes) {
 	var RateLimiter = require('limiter').RateLimiter;
 	// Allow 150 requests per hour (the Twitter search limit). Also understands
 	// 'second', 'minute', 'day', or a number of milliseconds
-	var limiter = new RateLimiter(50, 'second');
+	var limiter = new RateLimiter(100, 'second');
 
 	console.log('making promises...');
 
@@ -70,7 +70,7 @@ function newRouteSearch(adapter) {
 
 			var boxes = RouteBoxes.convertRouteToBoxes(route_points, 500);
 			var firstBox = boxes[0];
-			console.log('there are '+boxes.length+' boxes, sir.'+firstBox.length);
+			console.log('there are '+boxes.length+' boxes, sir.'+firstBox);
 
 			var promises = makeRequestPromises(adapter, boxes);
 			console.log('there are '+promises.length+' promises.');
