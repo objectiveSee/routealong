@@ -48,7 +48,7 @@ html(lang="en")
     script(src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false")
     script.
       $(document).ready(function() {
-
+        var markers = [];
         var mapOptions = {
           center: new google.maps.LatLng(10, 0),
           zoom: 2,
@@ -89,6 +89,11 @@ html(lang="en")
                 return {lat:p.lat(), lng:p.lng()};
               });
 
+              for(var i=markers.length-1; i>=0; i--)
+                markers[i].setMap(null);
+              markers.length = 0;
+
+              $('input[type=submit]').prop('disabled', true);
               $.ajax({
                 type: 'POST',
                 url: '/routealong',
@@ -96,7 +101,26 @@ html(lang="en")
                 async: 'false',
                 data: JSON.stringify(points),
                 success: function(data) {
-                  alert(data);
+                  $('input[type=submit]').prop('disabled', false);
+
+                  var colors = [
+                    'FF0000',
+                    'DD2200',
+                    'DD4400',
+                    '888800',
+                    '22DD00',
+                    '00FF00'
+                  ];
+
+                  for(var i=0; i<data.length; i++) {
+                    console.log(data[i]);
+                    markers.push(new google.maps.Marker({
+                      position: new google.maps.LatLng(data[i].lat, data[i].lon),
+                      map: map,
+                      title: data[i].id,
+                      icon: 'http://chart.googleapis.com/chart?chst=d_map_pin_letter&chld='+data[i].rating+'|'+colors[data[i].rating]+'|000000'
+                    }));
+                  }
                 },
                 error: function() {
                   alert('some sad error happend... dont panic!');
