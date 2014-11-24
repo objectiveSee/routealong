@@ -13,5 +13,5 @@ var myAdapter = new MyAdapter();
 var box = [59.375129767984, 22.544799804826, 64.208716083434, 35.190063476196];
 
 myAdapter.searchBox(box, function(result) {
-	console.log('done');
+	console.log('result='+JSON.stringify(result));
 });
